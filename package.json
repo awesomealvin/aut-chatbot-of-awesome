@@ -1,0 +1,23 @@
+{
+  "name": "aut-chatbot-of-awesome",
+  "version": "1.0.0",
+  "description": "A chatbot of sorts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awesomealvin/aut-chatbot-of-awesome.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awesomealvin/aut-chatbot-of-awesome/issues"
+  },
+  "homepage": "https://github.com/awesomealvin/aut-chatbot-of-awesome#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.0.17"
+  }
+}
