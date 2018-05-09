@@ -27,7 +27,7 @@ function getPaper(req, res) {
 
                 if (result[0]._id == paperToSearch) {
                     return res.json({
-                        'fulfillmentText': "Answer"
+                        'fulfillmentText': "Yes, "
                     });
                 }
             }
