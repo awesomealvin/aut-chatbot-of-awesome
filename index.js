@@ -12,6 +12,8 @@ paperInfo     = require('./API/Models/paperInfo');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.dbUrl);
+
+
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 var routes = require('./API/Routes/Routes'); //importing route
