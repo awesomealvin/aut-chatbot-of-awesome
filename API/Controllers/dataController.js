@@ -2,16 +2,57 @@
 var mongoose = require('mongoose');
 var paperInfo = mongoose.model('paperInfo');
 
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
+
 exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
-        getPaper(req, res)
+        getPaper2(req, res)
     }
 };
 
+function getPaper2(req, res) {
+    let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
+    console.log(paperToSearch);
+
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("chatbot");
+        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+            if (err) throw err;
+            console.log(result);
+
+            if (result.length != 0) {
+
+                if (result[0]._id == paperToSearch) {
+                    return res.json({
+                        speech: result[0]._id + " is a paper that is offered",
+                        fulfullmentText: result[0]._id + " is a paper that is offered",
+                        source: 'team info1'
+                    });
+                }
+            }
+            else{
+                return res.json({
+                    speech: "that is not a paper we offer",
+                    fulfullmentText: "that is not a paper we offer",
+                    source: 'team info1'
+                });
+            }
+
+            db.close();
+        });
+    });
+
+}
+
+
+/*
 function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
-    paperInfo.find({_id:paperToSearch}, function (err, paperExists) {
+    paperInfo.find({_id:"COMP500"}, function (err, paperExists) {
+        console.log(paperExists);
         if (err) {
             return res.json({
                 speech: 'Something went wrong!',
@@ -20,8 +61,9 @@ function getPaper(req, res) {
             });
         }
         if (paperExists) {
+            console.log(paperExists.year);
             return res.json({
-                speech: paperExists.year,
+                speech: paperExists.name,
                 displayText: paperExists.year,
                 source: 'team info2'
             });
@@ -35,3 +77,4 @@ function getPaper(req, res) {
         }
     });
 }
+*/

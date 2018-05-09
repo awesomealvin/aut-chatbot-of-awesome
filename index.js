@@ -31,7 +31,7 @@ MongoClient.connect(url, function(err, db) {
     dbo.collection("papers").find({_id:'COMP500'}, {_id:0, paperName:1, year:0}).toArray(function(err, result2) {
         if (err) throw err;
         result = result2;
-        console.log(result[0]._id);
+        //console.log(result[0]._id);
         db.close();
     });
 });
