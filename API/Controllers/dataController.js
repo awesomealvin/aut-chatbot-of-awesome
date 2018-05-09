@@ -7,11 +7,11 @@ var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 
 exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
-        getPaper2(req, res)
+        getPaper(req, res)
     }
 };
 
-function getPaper2(req, res) {
+function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
     console.log(paperToSearch);
