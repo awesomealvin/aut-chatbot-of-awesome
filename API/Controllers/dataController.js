@@ -57,13 +57,25 @@ function getMajorPaper(req, res){
       dbo.collection("papers").find({major: majorToSearch}).toArray(function (err, result) {
           if (err) throw err;
           console.log(result);
-
+    // needs to loop through all results and list all paper names
           if (result.length != 0) {
-              if (result[0].major == majorToSearch) {
-                  return res.json({
-                      'fulfillmentText': "Answer"
-                  });
+              var count = 0;
+              var num = 0;
+              var final = "";
+              while(count < result.length){
+                  if (result[count].major == majorToSearch) {
+                      num++;
+                      if(num == 1){
+                          final = "The papers required for that major are: "+result[count]._id;
+                      }else{
+                          final = final + ", " + result[count]._id;
+                      }
+                  }
+                  count++;
               }
+              return res.json({
+                  'fulfillmentText': final+"."
+              });
           }
           else{
               return res.json({
