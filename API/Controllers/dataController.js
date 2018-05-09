@@ -45,6 +45,37 @@ function getPaper(req, res) {
 
 }
 
+function getMajorPaper(req, res){
+  let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : 'Unknown';
+
+  MongoClient.connect(url, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("chatbot");
+      dbo.collection("major").find({_id: majorToSearch}).toArray(function (err, result) {
+          if (err) throw err;
+          console.log(result);
+
+          if (result.length != 0) {
+
+              if (result[0]._id == majorToSearch) {
+                  return res.json({
+                      'fulfillmentText': "Answer"
+                  });
+              }
+          }
+          else{
+              return res.json({
+                  speech: "that is not a major we offer",
+                  fulfullmentText: "that is not a major we offer",
+                  source: 'team info1'
+              });
+          }
+
+          db.close();
+      });
+  });
+}
+
 
 /*
 function getPaper(req, res) {
