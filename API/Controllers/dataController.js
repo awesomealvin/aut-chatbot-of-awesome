@@ -27,9 +27,7 @@ function getPaper(req, res) {
 
                 if (result[0]._id == paperToSearch) {
                     return res.json({
-                        speech: result[0]._id + " is a paper that is offered",
-                        fulfullmentText: result[0]._id + " is a paper that is offered",
-                        source: 'team info1'
+                        'fulfillmentText': "Answer"
                     });
                 }
             }
