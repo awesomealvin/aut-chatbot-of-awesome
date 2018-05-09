@@ -93,9 +93,8 @@ function getMajorPaper(req, res){
           }
           else{
               return res.json({
-                  speech: "that is not a major we offer",
-                  fulfullmentText: "that is not a major we offer",
-                  source: 'team info1'
+
+                  'fulfullmentText' : "that is not a major we offer"
               });
           }
 
