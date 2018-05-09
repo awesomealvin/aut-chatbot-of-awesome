@@ -114,19 +114,33 @@ function getPaper(req, res) {
             if (err) throw err;
             // console.log(result);
 
+            var returnString = "";
+
             if (result.length != 0) {
 
                 if (result[0]._id == paperToSearch) {
+
+
+                    if(result[0].major == "core")
+                    {
+                        returnString = "It is a core paper."
+                    }
+                    else if(result[0].major == "Software Development"){
+                        returnString = "It is in the Software Developemnt major.";
+                    }
+                    else{
+                        returnString = "";
+                    }
+
+
                     return res.json({
-                        'fulfillmentText': "Answer"
+                        'fulfillmentText': "Yes, " +paperToSearch +" is a paper that the university offers. \n" +returnString
                     });
                 }
             }
             else{
                 return res.json({
-                    speech: "that is not a paper we offer",
-                    fulfullmentText: "that is not a paper we offer",
-                    source: 'team info1'
+                    'fulfillmentText': "No, " +paperToSearch +" is not a paper that the university offers."
                 });
             }
 
