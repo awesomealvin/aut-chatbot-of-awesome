@@ -9,6 +9,9 @@ exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
         getPaper(req, res)
     }
+    else if(req.body.queryResult.action == "getMajorPaper"){
+      getMajorPaper(req, res)
+    }
 };
 
 function getPaper(req, res) {
@@ -51,13 +54,12 @@ function getMajorPaper(req, res){
   MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       var dbo = db.db("chatbot");
-      dbo.collection("major").find({_id: majorToSearch}).toArray(function (err, result) {
+      dbo.collection("papers").find({major: majorToSearch}).toArray(function (err, result) {
           if (err) throw err;
           console.log(result);
 
           if (result.length != 0) {
-
-              if (result[0]._id == majorToSearch) {
+              if (result[0].major == majorToSearch) {
                   return res.json({
                       'fulfillmentText': "Answer"
                   });
