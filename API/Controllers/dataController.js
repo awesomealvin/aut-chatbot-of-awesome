@@ -63,7 +63,7 @@ function preReq(req, res) {
 
 
 function getMajorPaper(req, res){
-  let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : 'Unknown';
+  let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
 
   MongoClient.connect(url, function (err, db) {
       if (err) throw err;
@@ -92,10 +92,18 @@ function getMajorPaper(req, res){
               });
           }
           else{
-              return res.json({
+              if(majorToSearch == "Unknown"){
+                  return res.json({
 
-                  'fulfillmentText' : "That is not a major we offer.",
-              });
+                      'fulfillmentText' : "Unfortunately, that major does not exist.",
+                  });
+              }else{
+                  return res.json({
+
+                      'fulfillmentText' : "Currently, "+majorToSearch+" does not have papers listed.",
+                  });
+              }
+
           }
 
           db.close();
