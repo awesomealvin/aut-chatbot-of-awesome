@@ -11,42 +11,56 @@ exports.processRequest = function (req, res) {
     }
     else if(req.body.queryResult.action == "getMajorPaper"){
       getMajorPaper(req, res)
-    }
+    } else if (req.body.queryResult.action == "preReq") {
+        preReq(req, res);
+    } else if (req.body.queryResult.action == "coReq") {
+        coReq(req, res);
 };
 
-function getPaper(req, res) {
+function preReq(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
-
-    console.log(paperToSearch);
 
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
         dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
             if (err) throw err;
-            console.log(result);
+            // console.log(result);
 
             if (result.length != 0) {
 
                 if (result[0]._id == paperToSearch) {
-                    return res.json({
-                        'fulfillmentText': "Answer"
-                    });
+
+                    var name = result[0]._id+", " + result[0].paperName;
+
+                    // If there prerequisite value is NOT empty
+                    if (result[0].preReq) {
+                        var output = "The pre-requisite(s) for " +  name + " are "+result[0].preReq +".";
+
+                        return res.json({
+                            'fulfillmentText': output,
+                        });
+                    } else {
+                        var output = name+" does not have any pre-requisites.";
+                        return res.json({
+                            'fulfillmentText': output,
+                        });
+                    }
+                   
                 }
             }
             else{
                 return res.json({
-                    speech: "that is not a paper we offer",
-                    fulfullmentText: "that is not a paper we offer",
-                    source: 'team info1'
+                    'fulfillmentText': "That is not a paper that we offer.",
                 });
             }
 
             db.close();
         });
     });
-
+    
 }
+
 
 function getMajorPaper(req, res){
   let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : 'Unknown';
@@ -90,34 +104,94 @@ function getMajorPaper(req, res){
   });
 }
 
+function coReq(req, res) {
+    let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
-/*
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("chatbot");
+        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+            if (err) throw err;
+            // console.log(result);
+
+            if (result.length != 0) {
+
+                if (result[0]._id == paperToSearch) {
+
+                    var name = result[0]._id+", " + result[0].paperName;
+
+                    // If there prerequisite value is NOT empty
+                    if (result[0].coReq) {
+                        var output = "The co-requisite(s) for " +  name + " are "+result[0].coReq +".";
+
+                        return res.json({
+                            'fulfillmentText': output,
+                        });
+                    } else {
+                        var output = name+" does not have any co-requisites.";
+                        return res.json({
+                            'fulfillmentText': output,
+                        });
+                    }
+                   
+                }
+            }
+            else{
+                return res.json({
+                    'fulfillmentText': "That is not a paper that we offer.",
+                });
+            }
+
+            db.close();
+        });
+    });
+    
+}
+
 function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
-    paperInfo.find({_id:"COMP500"}, function (err, paperExists) {
-        console.log(paperExists);
-        if (err) {
-            return res.json({
-                speech: 'Something went wrong!',
-                displayText: 'Something went wrong!',
-                source: 'team info1'
-            });
-        }
-        if (paperExists) {
-            console.log(paperExists.year);
-            return res.json({
-                speech: paperExists.name,
-                displayText: paperExists.year,
-                source: 'team info2'
-            });
-        }
-        else {
-            return res.json({
-                speech: 'Currently I am not having information about this team',
-                displayText: 'Currently I am not having information about this team',
-                source: 'team info3'
-            });
-        }
+
+    // console.log(paperToSearch);
+
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("chatbot");
+        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+            if (err) throw err;
+            // console.log(result);
+
+            var returnString = "";
+
+            if (result.length != 0) {
+
+                if (result[0]._id == paperToSearch) {
+
+
+                    if(result[0].major == "core")
+                    {
+                        returnString = "It is a core paper."
+                    }
+                    else if(result[0].major == "Software Development"){
+                        returnString = "It is in the Software Developemnt major.";
+                    }
+                    else{
+                        returnString = "";
+                    }
+
+
+                    return res.json({
+                        'fulfillmentText': "Yes, " +paperToSearch +" is a paper that the university offers. \n" +returnString
+                    });
+                }
+            }
+            else{
+                return res.json({
+                    'fulfillmentText': "No, " +paperToSearch +" is not a paper that the university offers."
+                });
+            }
+
+            db.close();
+        });
     });
 }
-*/
+}
