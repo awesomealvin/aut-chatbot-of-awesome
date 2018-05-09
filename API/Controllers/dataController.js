@@ -94,7 +94,7 @@ function getMajorPaper(req, res){
           else{
               return res.json({
 
-                  'fulfillmentText' : "That is not a major we offer",
+                  'fulfillmentText' : "That is not a major we offer.",
               });
           }
 
