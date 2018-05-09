@@ -8,6 +8,9 @@ var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
         getPaper(req, res)
+    }
+    else if(req.body.queryResult.action == "getMajorPaper"){
+      getMajorPaper(req, res)
     } else if (req.body.queryResult.action == "preReq") {
         preReq(req, res);
     } else if (req.body.queryResult.action == "coReq") {
@@ -56,6 +59,49 @@ function preReq(req, res) {
         });
     });
     
+}
+
+
+function getMajorPaper(req, res){
+  let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : 'Unknown';
+
+  MongoClient.connect(url, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("chatbot");
+      dbo.collection("papers").find({major: majorToSearch}).toArray(function (err, result) {
+          if (err) throw err;
+          console.log(result);
+    // needs to loop through all results and list all paper names
+          if (result.length != 0) {
+              var count = 0;
+              var num = 0;
+              var final = "";
+              while(count < result.length){
+                  if (result[count].major == majorToSearch) {
+                      num++;
+                      if(num == 1){
+                          final = "The papers required for that major are: "+result[count]._id;
+                      }else{
+                          final = final + ", " + result[count]._id;
+                      }
+                  }
+                  count++;
+              }
+              return res.json({
+                  'fulfillmentText': final+"."
+              });
+          }
+          else{
+              return res.json({
+                  speech: "that is not a major we offer",
+                  fulfullmentText: "that is not a major we offer",
+                  source: 'team info1'
+              });
+          }
+
+          db.close();
+      });
+  });
 }
 
 function coReq(req, res) {
