@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
-var paperInfo = mongoose.model('paperInfo');
+// var paperInfo = mongoose.model('paperInfo');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
@@ -9,13 +9,19 @@ exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
         getPaper(req, res)
     }
-    else if(req.body.queryResult.action == "getMajorPaper"){
-      getMajorPaper(req, res)
+    else if (req.body.queryResult.action == "getMajorPaper") {
+        getMajorPaper(req, res)
     } else if (req.body.queryResult.action == "preReq") {
         preReq(req, res);
     } else if (req.body.queryResult.action == "coReq") {
         coReq(req, res);
-};
+    }
+}
+
+
+exports.helloWorld = function () {
+    return "hello world";
+}
 
 function preReq(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
@@ -23,7 +29,7 @@ function preReq(req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
-        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+        dbo.collection("papers").find({ _id: paperToSearch }).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
 
@@ -31,25 +37,25 @@ function preReq(req, res) {
 
                 if (result[0]._id == paperToSearch) {
 
-                    var name = result[0]._id+", " + result[0].paperName;
+                    var name = result[0]._id + ", " + result[0].paperName;
 
                     // If there prerequisite value is NOT empty
                     if (result[0].preReq) {
-                        var output = "The pre-requisite(s) for " +  name + " are "+result[0].preReq +".";
+                        var output = "The pre-requisite(s) for " + name + " are " + result[0].preReq + ".";
 
                         return res.json({
                             'fulfillmentText': output,
                         });
                     } else {
-                        var output = name+" does not have any pre-requisites.";
+                        var output = name + " does not have any pre-requisites.";
                         return res.json({
                             'fulfillmentText': output,
                         });
                     }
-                   
+
                 }
             }
-            else{
+            else {
                 return res.json({
                     'fulfillmentText': "That is not a paper that we offer.",
                 });
@@ -58,57 +64,57 @@ function preReq(req, res) {
             db.close();
         });
     });
-    
+
 }
 
 
-function getMajorPaper(req, res){
-  let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
+function getMajorPaper(req, res) {
+    let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
 
-  MongoClient.connect(url, function (err, db) {
-      if (err) throw err;
-      var dbo = db.db("chatbot");
-      dbo.collection("papers").find({major: majorToSearch}).toArray(function (err, result) {
-          if (err) throw err;
-          console.log(result);
-    // needs to loop through all results and list all paper names
-          if (result.length != 0) {
-              var count = 0;
-              var num = 0;
-              var final = "";
-              while(count < result.length){
-                  if (result[count].major == majorToSearch) {
-                      num++;
-                      if(num == 1){
-                          final = "The papers required for that major are: "+result[count]._id;
-                      }else{
-                          final = final + ", " + result[count]._id;
-                      }
-                  }
-                  count++;
-              }
-              return res.json({
-                  'fulfillmentText': final+"."
-              });
-          }
-          else{
-              if(majorToSearch == "Unknown"){
-                  return res.json({
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("chatbot");
+        dbo.collection("papers").find({ major: majorToSearch }).toArray(function (err, result) {
+            if (err) throw err;
+            console.log(result);
+            // needs to loop through all results and list all paper names
+            if (result.length != 0) {
+                var count = 0;
+                var num = 0;
+                var final = "";
+                while (count < result.length) {
+                    if (result[count].major == majorToSearch) {
+                        num++;
+                        if (num == 1) {
+                            final = "The papers required for that major are: " + result[count]._id;
+                        } else {
+                            final = final + ", " + result[count]._id;
+                        }
+                    }
+                    count++;
+                }
+                return res.json({
+                    'fulfillmentText': final + "."
+                });
+            }
+            else {
+                if (majorToSearch == "Unknown") {
+                    return res.json({
 
-                      'fulfillmentText' : "Unfortunately, that major does not exist.",
-                  });
-              }else{
-                  return res.json({
+                        'fulfillmentText': "Unfortunately, that major does not exist.",
+                    });
+                } else {
+                    return res.json({
 
-                      'fulfillmentText' : "Currently, "+majorToSearch+" does not have papers listed.",
-                  });
-              }
+                        'fulfillmentText': "Currently, " + majorToSearch + " does not have papers listed.",
+                    });
+                }
 
-          }
+            }
 
-          db.close();
-      });
-  });
+            db.close();
+        });
+    });
 }
 
 function coReq(req, res) {
@@ -117,7 +123,7 @@ function coReq(req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
-        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+        dbo.collection("papers").find({ _id: paperToSearch }).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
 
@@ -125,25 +131,25 @@ function coReq(req, res) {
 
                 if (result[0]._id == paperToSearch) {
 
-                    var name = result[0]._id+", " + result[0].paperName;
+                    var name = result[0]._id + ", " + result[0].paperName;
 
                     // If there prerequisite value is NOT empty
                     if (result[0].coReq) {
-                        var output = "The co-requisite(s) for " +  name + " are "+result[0].coReq +".";
+                        var output = "The co-requisite(s) for " + name + " are " + result[0].coReq + ".";
 
                         return res.json({
                             'fulfillmentText': output,
                         });
                     } else {
-                        var output = name+" does not have any co-requisites.";
+                        var output = name + " does not have any co-requisites.";
                         return res.json({
                             'fulfillmentText': output,
                         });
                     }
-                   
+
                 }
             }
-            else{
+            else {
                 return res.json({
                     'fulfillmentText': "That is not a paper that we offer.",
                 });
@@ -152,7 +158,7 @@ function coReq(req, res) {
             db.close();
         });
     });
-    
+
 }
 
 function getPaper(req, res) {
@@ -163,7 +169,7 @@ function getPaper(req, res) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
-        dbo.collection("papers").find({_id: paperToSearch}).toArray(function (err, result) {
+        dbo.collection("papers").find({ _id: paperToSearch }).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
 
@@ -174,31 +180,29 @@ function getPaper(req, res) {
                 if (result[0]._id == paperToSearch) {
 
 
-                    if(result[0].major == "core")
-                    {
+                    if (result[0].major == "core") {
                         returnString = "It is a core paper."
                     }
-                    else if(result[0].major == "Software Development"){
+                    else if (result[0].major == "Software Development") {
                         returnString = "It is in the Software Developemnt major.";
                     }
-                    else{
+                    else {
                         returnString = "";
                     }
 
 
                     return res.json({
-                        'fulfillmentText': "Yes, " +paperToSearch +" is a paper that the university offers. \n" +returnString
+                        'fulfillmentText': "Yes, " + paperToSearch + " is a paper that the university offers. \n" + returnString
                     });
                 }
             }
-            else{
+            else {
                 return res.json({
-                    'fulfillmentText': "No, " +paperToSearch +" is not a paper that the university offers."
+                    'fulfillmentText': "No, " + paperToSearch + " is not a paper that the university offers."
                 });
             }
 
             db.close();
         });
     });
-}
 }

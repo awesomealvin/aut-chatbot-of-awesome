@@ -5,8 +5,8 @@ bodyParser   = require('body-parser'),
 http         = require('http'),
 config       = require('./config'),
 server       = express(),
-mongoose     = require('mongoose'),
-paperInfo     = require('./API/Models/paperInfo');
+mongoose     = require('mongoose')
+// paperInfo     = require('./API/Models/paperInfo');
 //created model loading here
 // mongoose instance connection url connection
 
