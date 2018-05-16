@@ -99,7 +99,6 @@ function getMajorPaper(req, res) {
             else {
                 if (majorToSearch == "Unknown") {
                     return res.json({
-
                         'fulfillmentText': "Unfortunately, that major does not exist.",
                     });
                 } else {
@@ -163,8 +162,8 @@ function coReq(req, res) {
 function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
     // console.log(paperToSearch);
-
-    MongoClient.connect(url, function (err, db)  {
+    var output = "";
+    MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
 
@@ -188,14 +187,17 @@ function getPaper(req, res) {
                     else {
                         returnString = "";
                     }
-
+                    // var result = "Yes, " + paperToSearch + " is an paper that the university offers. \n" + returnString;
+                    // output = "{\"fulfillmentText\": \"" + result + "\"}";
+                    // res.type('json');
+                    // res.send(front);
                     return res.json({
                         'fulfillmentText': "Yes, " + paperToSearch + " is a paper that the university offers. \n" + returnString
                     });
                 }
             }
             else {
-                return res.json({
+                res.json({
                     'fulfillmentText': "No, " + paperToSearch + " is not a paper that the university offers."
                 });
             }
@@ -203,4 +205,5 @@ function getPaper(req, res) {
             db.close();
         });
     });
+    // return output;
 }
