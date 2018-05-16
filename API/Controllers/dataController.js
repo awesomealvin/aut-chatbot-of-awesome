@@ -7,7 +7,7 @@ var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 
 module.exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
-        console.log(req);
+        // console.log(req);
         getPaper(req, res)
     }
     else if (req.body.queryResult.action == "getMajorPaper") {

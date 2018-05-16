@@ -24,3 +24,13 @@ describe('getPaper', function () {
 
 });
 
+describe('Database Connection', function () {
+    it('The database should connect successfully', function () {
+        var MongoClient = require('mongodb').MongoClient;
+        var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot";
+        MongoClient.connect(url, function (err, db) {
+            assert.equal(err, null);
+        });        
+    })
+})
+
