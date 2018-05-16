@@ -9,20 +9,21 @@ describe('Unit Test Test', function() {
 
 
 
-describe('getPaper', function () {
+// describe('getPaper', function () {
 
-    var fs = require('fs');
-    var req = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperTest.json'));
+//     var fs = require('fs');
+//     var req = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperTest.json'));
 
-    var res = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
+//     var res = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
 
+//     var out = dataController.processRequest(req, res);
+//     console.log("OUT = " + out);
 
+//     it('It should return the correct JSON file if unit test works',function () {
+//         assert.equal(dataController.processRequest(req, res), res)
+//     });
 
-    it('It should return the correct JSON file if unit test works',function () {
-        assert.equal(dataController.processRequest(req, res), res)
-    });
-
-});
+// });
 
 describe('Database Connection', function () {
     it('The database should connect successfully', function () {
