@@ -31,6 +31,7 @@ describe('Database Connection', function () {
         var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot";
         MongoClient.connect(url, function (err, db) {
             assert.equal(err, null);
+            db.close();
         });        
     })
 })
