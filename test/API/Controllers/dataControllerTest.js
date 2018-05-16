@@ -16,7 +16,7 @@ describe('getPaper', function () {
 
     var res = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
 
-    console.log(req);
+
 
     it('It should return the correct JSON file if unit test works',function () {
         assert.equal(dataController.processRequest(req, res), res)
