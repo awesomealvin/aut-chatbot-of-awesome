@@ -7,3 +7,19 @@ describe('Unit Test Test', function() {
     });
 }) ;
 
+
+
+describe('getPaper', function () {
+
+    var reqIn = require('getPaperTest');
+    var req = JSON.parse(reqIn.readFileSync('file', 'utf8'));
+
+    var resIn = require('getPaperResponse');
+    var res = JSON.parse(resIn.readFileSync('file', 'utf8'));
+
+    it('It should return the correct JSON file if unit test works',function () {
+        assert.equal(dataController.getPaper(req, res), res)
+    });
+
+});
+

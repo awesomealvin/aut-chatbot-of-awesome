@@ -67,7 +67,6 @@ function preReq(req, res) {
 
 }
 
-
 function getMajorPaper(req, res) {
     let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
 
@@ -161,7 +160,7 @@ function coReq(req, res) {
 
 }
 
-function getPaper(req, res) {
+exports.getPaper = function(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
     // console.log(paperToSearch);

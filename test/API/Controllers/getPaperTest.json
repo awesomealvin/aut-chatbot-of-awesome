@@ -1,0 +1,22 @@
+{
+  "responseId": "bed2c2b7-86c5-4d12-89d4-3fc7762c345e",
+  "queryResult": {
+    "queryText": "do you offer comp500",
+    "action": "getPaper",
+    "parameters": {
+      "allPapers": "COMP500"
+    },
+    "allRequiredParamsPresent": true,
+    "intent": {
+      "name": "projects/aut-chat-bot/agent/intents/93ce73cf-4b68-4c24-89f8-70db17d19ef4",
+      "displayName": "Do you offer the paper"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en"
+  },
+  "originalDetectIntentRequest": {
+    "payload": {}
+  },
+  "session": "projects/aut-chat-bot/agent/sessions/e7eb4578-4a19-43a4-80f1-eafb7ba18eb7"
+}
