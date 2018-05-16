@@ -11,14 +11,15 @@ describe('Unit Test Test', function() {
 
 describe('getPaper', function () {
 
-    var reqIn = require('test/API/Controllers/getPaperTest.json');
-    var req = JSON.parse(reqIn.readFileSync('file', 'utf8'));
+    var fs = require('fs');
+    var req = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperTest.json'));
 
-    var resIn = require('test/API/Controllers/getPaperResponse');
-    var res = JSON.parse(resIn.readFileSync('file', 'utf8'));
+    var res = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
+
+    console.log(req);
 
     it('It should return the correct JSON file if unit test works',function () {
-        assert.equal(dataController.getPaper(req, res), res)
+        assert.equal(dataController.processRequest(req, res), res)
     });
 
 });

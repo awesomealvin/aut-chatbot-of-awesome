@@ -5,8 +5,9 @@ var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 
-exports.processRequest = function (req, res) {
+module.exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
+        console.log(req);
         getPaper(req, res)
     }
     else if (req.body.queryResult.action == "getMajorPaper") {
@@ -160,9 +161,8 @@ function coReq(req, res) {
 
 }
 
-exports.getPaper = function(req, res) {
+function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
-
     // console.log(paperToSearch);
 
     MongoClient.connect(url, function (err, db) {
