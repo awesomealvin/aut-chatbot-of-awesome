@@ -5,6 +5,7 @@ const assert = require('chai').assert;
 const jsonEqual = require('chai').chaiJsonEqual;
 const chai = require('chai');
 const expect = chai.expect;
+// const deep = require('chai').deep;
 const to = require('chai').to;
 chai.use(require('chai-http'));
 const end = require('chai').end;
@@ -34,12 +35,7 @@ describe('getPaper', function () {
 
     var response = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
 
-    // var out = dataController.processRequest(req, res);
-    // console.log("OUT = " + out);
-
     it('It should return the correct JSON file if unit test works',function (done) {
-        // assert.equal(dataController.processRequest(req, res), res)
-        var routes = require('../../../API/Routes/Routes');
 
         chai.request("http://localhost:8000")
         .post('/')
@@ -54,12 +50,14 @@ describe('getPaper', function () {
             // if (res.body == response) {
             //     console.log("THEY THE SAME");
             // }
-            // assert.equal(res.body, response);
+            // assert.to.deep.equal(res.body, response);
             // expect(res.body).to.jsonEqual(response);
-            expect(JSON.stringify(res.body)).to.equal(JSON.stringify(response));
+            // expect(JSON.stringify(res.body)).to.equal(JSON.stringify(response));
             // expect("a").to.equal("f");
             // expect(res.body).to.be.null;
-            // assert.equal(1, 5);
+            // assert.equal(1, 5); 
+            expect(res.body).to.deep.equal(response);
+            
             done();
         });
         
