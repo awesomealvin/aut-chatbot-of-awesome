@@ -7,7 +7,7 @@ var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 
 module.exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
-        getPaper(req, res)
+        getPaper(req, res);
     }
     else if (req.body.queryResult.action == "getMajorPaper") {
         getMajorPaper(req, res)
@@ -164,9 +164,10 @@ function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
     // console.log(paperToSearch);
 
-    MongoClient.connect(url, function (err, db) {
+    MongoClient.connect(url, function (err, db)  {
         if (err) throw err;
         var dbo = db.db("chatbot");
+
         dbo.collection("papers").find({ _id: paperToSearch }).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
@@ -187,7 +188,6 @@ function getPaper(req, res) {
                     else {
                         returnString = "";
                     }
-
 
                     return res.json({
                         'fulfillmentText': "Yes, " + paperToSearch + " is a paper that the university offers. \n" + returnString
