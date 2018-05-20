@@ -1,0 +1,12 @@
+{
+   
+    "queryResult": {
+      "queryText": "do you offer comp500",
+      "action": "getPaper",
+      "parameters": {
+        "allPapers": "COMP500"
+      }
+    }
+  
+ 
+}
