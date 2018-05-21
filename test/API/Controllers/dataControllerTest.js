@@ -36,26 +36,37 @@ describe('getPaper', function () {
     var response = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
 
     it('It should return the correct JSON file if unit test works',function (done) {
-
+        this.timeout(10000);
         chai.request("http://localhost:8000")
         .post('/')
         // .set('content-type', 'application/x-www-form-urlencoded')
         .send(request)
         .end(function (err, res) {
-            // console.log(err);
-            // if (err) done(err);
-            // res.body.should.have('yo');
-            console.log(res.body);
-            console.log(response);
-            // if (res.body == response) {
-            //     console.log("THEY THE SAME");
-            // }
-            // assert.to.deep.equal(res.body, response);
-            // expect(res.body).to.jsonEqual(response);
-            // expect(JSON.stringify(res.body)).to.equal(JSON.stringify(response));
-            // expect("a").to.equal("f");
-            // expect(res.body).to.be.null;
-            // assert.equal(1, 5); 
+
+            expect(res.body).to.deep.equal(response);
+            
+            done();
+        });
+        
+    });
+
+});
+
+describe('failedPaper', function () {
+
+    var fs = require('fs');
+    var request = JSON.parse(fs.readFileSync('./test/API/Controllers/failedPaperTest.json'));
+
+    var response = JSON.parse(fs.readFileSync('./test/API/Controllers/failedPaperResponse.json'));
+
+    it('It should return the correct JSON response file.',function (done) {
+        this.timeout(10000);
+        chai.request("http://localhost:8000")
+        .post('/')
+        // .set('content-type', 'application/x-www-form-urlencoded')
+        .send(request)
+        .end(function (err, res) {
+
             expect(res.body).to.deep.equal(response);
             
             done();
