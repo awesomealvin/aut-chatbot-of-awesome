@@ -5,9 +5,9 @@ var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot"
 
-exports.processRequest = function (req, res) {
+module.exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
-        getPaper(req, res)
+        getPaper(req, res);
     }
     else if (req.body.queryResult.action == "getMajorPaper") {
         getMajorPaper(req, res)
@@ -67,7 +67,6 @@ function preReq(req, res) {
 
 }
 
-
 function getMajorPaper(req, res) {
     let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
 
@@ -100,7 +99,6 @@ function getMajorPaper(req, res) {
             else {
                 if (majorToSearch == "Unknown") {
                     return res.json({
-
                         'fulfillmentText': "Unfortunately, that major does not exist.",
                     });
                 } else {
@@ -163,12 +161,12 @@ function coReq(req, res) {
 
 function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
-
     // console.log(paperToSearch);
-
+    var output = "";
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("chatbot");
+
         dbo.collection("papers").find({ _id: paperToSearch }).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
@@ -189,15 +187,17 @@ function getPaper(req, res) {
                     else {
                         returnString = "";
                     }
-
-
+                    // var result = "Yes, " + paperToSearch + " is an paper that the university offers. \n" + returnString;
+                    // output = "{\"fulfillmentText\": \"" + result + "\"}";
+                    // res.type('json');
+                    // res.send(front);
                     return res.json({
                         'fulfillmentText': "Yes, " + paperToSearch + " is a paper that the university offers. \n" + returnString
                     });
                 }
             }
             else {
-                return res.json({
+                res.json({
                     'fulfillmentText': "No, " + paperToSearch + " is not a paper that the university offers."
                 });
             }
@@ -205,4 +205,5 @@ function getPaper(req, res) {
             db.close();
         });
     });
+    // return output;
 }
