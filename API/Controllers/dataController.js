@@ -28,6 +28,7 @@ exports.helloWorld = function () {
     return "hello world";
 }
 
+
 function failPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
@@ -37,45 +38,51 @@ function failPaper(req, res) {
 
 
         dbo.collection("papers").find().toArray(function (err, result) {
-            var postRequisites = [];
+            if (result.length > 0) {
+                var postRequisites = [];
 
-            result.forEach(element => {
-                var str = String(element.preReq);
+                result.forEach(element => {
+                    var str = String(element.preReq);
 
-                // console.log(element.preReq + " | " + paperToSearch);
-                if (str.includes(paperToSearch)) {
-                    postRequisites.push(element._id);
-                }
-            });
-
-            if (postRequisites.length != 0) {
-                var output = "If you fail " + paperToSearch + ", then you cannot take ";
-
-                for (var i = 0; i < postRequisites.length; i++) {
-                    output += postRequisites[i];
-                    if (i == postRequisites.length - 1) {
-                        output += ".";
-                    } else if (i == postRequisites.length - 2) {
-                        output += " and ";
-                    } else {
-                        output += ", ";
+                    // console.log(element.preReq + " | " + paperToSearch);
+                    if (str.includes(paperToSearch)) {
+                        postRequisites.push(element._id);
                     }
-                }
-
-                return res.json({
-                    'fulfillmentText': output,
                 });
+
+                if (postRequisites.length != 0) {
+                    var output = "If you fail " + paperToSearch + ", then you cannot take ";
+
+                    for (var i = 0; i < postRequisites.length; i++) {
+                        output += postRequisites[i];
+                        if (i == postRequisites.length - 1) {
+                            output += ".";
+                        } else if (i == postRequisites.length - 2) {
+                            output += " and ";
+                        } else {
+                            output += ", ";
+                        }
+                    }
+
+                    return res.json({
+                        'fulfillmentText': output,
+                    });
+                } else {
+                    return res.json({
+                        'fulfillmentText': "You can take any paper if you fail " + paperToSearch + ". It'll just be a shame and a waste of time that you failed it.",
+                    });
+                }
             } else {
                 return res.json({
                     'fulfillmentText': "That is not a paper that we offer.",
                 });
             }
-
         });
 
         db.close();
     });
 }
+
 
 function preReq(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
