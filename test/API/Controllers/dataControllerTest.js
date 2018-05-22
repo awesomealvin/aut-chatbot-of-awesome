@@ -12,6 +12,7 @@ const end = require('chai').end;
 const should = require('chai').should;
 const have = require('chai').have;
 const dataController = require('../../../API/Controllers/dataController');
+const getRandomInt  = require('../../../API/Controllers/getRandomInt')
 const index = require('../../../index');
 // const Routes = require('../../../API/Routes/dataController');
 
@@ -20,6 +21,13 @@ describe('Unit Test Test', function() {
         assert.equal(dataController.helloWorld(),"hello world");
     });
 }) ;
+
+describe('Random number test', function () {
+    it('should retun a number between 0 and the value input, inclusive', function () {
+        getRandomInt
+        expect(getRandomInt.getRandomInt(10)).to.be.within(0,10);
+    });
+})
 
 describe('A=A', function() {
     it('A should equal A', function() {
@@ -36,34 +44,69 @@ describe('getPaper', function () {
     var response = JSON.parse(fs.readFileSync('./test/API/Controllers/getPaperResponse.json'));
 
     it('It should return the correct JSON file if unit test works',function (done) {
-
+        this.timeout(10000);
         chai.request("http://localhost:8000")
         .post('/')
         // .set('content-type', 'application/x-www-form-urlencoded')
         .send(request)
         .end(function (err, res) {
-            // console.log(err);
-            // if (err) done(err);
-            // res.body.should.have('yo');
-            console.log(res.body);
-            console.log(response);
-            // if (res.body == response) {
-            //     console.log("THEY THE SAME");
-            // }
-            // assert.to.deep.equal(res.body, response);
-            // expect(res.body).to.jsonEqual(response);
-            // expect(JSON.stringify(res.body)).to.equal(JSON.stringify(response));
-            // expect("a").to.equal("f");
-            // expect(res.body).to.be.null;
-            // assert.equal(1, 5); 
+
             expect(res.body).to.deep.equal(response);
-            
+
             done();
         });
-        
+
     });
 
 });
+
+describe('failedPaper', function () {
+
+    var fs = require('fs');
+    var request = JSON.parse(fs.readFileSync('./test/API/Controllers/failedPaperTest.json'));
+
+    var response = JSON.parse(fs.readFileSync('./test/API/Controllers/failedPaperResponse.json'));
+
+    it('It should return the correct JSON response file.',function (done) {
+        this.timeout(10000);
+        chai.request("http://localhost:8000")
+        .post('/')
+        // .set('content-type', 'application/x-www-form-urlencoded')
+        .send(request)
+        .end(function (err, res) {
+
+            expect(res.body).to.deep.equal(response);
+
+            done();
+        });
+
+    });
+
+});
+
+
+describe('majorsJob', function () {
+
+    var fs = require('fs');
+    var request = JSON.parse(fs.readFileSync('./test/API/Controllers/testJobs.json'));
+
+    var response = JSON.parse(fs.readFileSync('./test/API/Controllers/testJobsResponse.json'));
+
+    it('It should return the correct JSON response file.',function (done) {
+        this.timeout(10000);
+        chai.request("http://localhost:8000")
+            .post('/')
+            .send(request)
+            .end(function (err, res) {
+
+                expect(res.body).to.deep.equal(response);
+
+                done();
+            });
+
+    });
+
+})
 
 
 describe('Database Connection', function () {
@@ -73,7 +116,6 @@ describe('Database Connection', function () {
         MongoClient.connect(url, function (err, db) {
             assert.equal(err, null);
             db.close();
-        });        
+        });
     })
 })
-

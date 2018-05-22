@@ -1,0 +1,28 @@
+{
+  "responseId": "b038d626-93a5-47d4-81c5-efc3e64911e9",
+  "queryResult": {
+    "queryText": "If I failed comp603, how does this affect my progress?",
+    "action": "failedPaper",
+    "parameters": {
+      "allPapers": "COMP603"
+    },
+    "allRequiredParamsPresent": true,
+    "fulfillmentText": "If you failed COMP603, then you can't take...",
+    "fulfillmentMessages": [
+      {
+        "text": {
+          "text": [
+            "If you failed COMP603, then you can't take..."
+          ]
+        }
+      }
+    ],
+    "intent": {
+      "name": "projects/aut-chat-bot/agent/intents/74e3f6eb-edca-46f2-b3bc-fb9c950e4abd",
+      "displayName": "Failed Papers"
+    },
+    "intentDetectionConfidence": 1,
+    "diagnosticInfo": {},
+    "languageCode": "en"
+  }
+}
