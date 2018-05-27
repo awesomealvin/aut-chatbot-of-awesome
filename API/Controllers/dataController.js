@@ -1,10 +1,13 @@
 'use strict';
 var mongoose = require('mongoose');
-// var paperInfo = mongoose.model('paperInfo');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://ping:ping@ds117070.mlab.com:17070/chatbot";
 
+/**
+ * Function that receives the requests that decides which intent to fall into
+ * @author Thom Bilton
+ */
 module.exports.processRequest = function (req, res) {
     if (req.body.queryResult.action == "getPaper") {
         getPaper(req, res);
@@ -23,11 +26,20 @@ module.exports.processRequest = function (req, res) {
     }
 }
 
-
+/**
+ * A simple function that tests our unit tests
+ * @author Alvin Tang
+ * @return {string} Hello World!
+ */
 exports.helloWorld = function () {
     return "hello world";
 }
 
+/**
+ * Logic for the fail paper question.
+ * @author Alvin Tang
+ * @return {json} JSON string
+ */
 function failPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
@@ -77,6 +89,11 @@ function failPaper(req, res) {
     });
 }
 
+/**
+* Logic for the preReq question
+* @author Alvin Tang
+* @return {json} JSON string
+*/
 function preReq(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
@@ -121,6 +138,11 @@ function preReq(req, res) {
 
 }
 
+/**
+* Logic to return the answer when a user tries to find out the papers required for a major.
+* @author Calli Bates
+* @return {json} JSON string
+*/
 function getMajorPaper(req, res) {
     let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : "Unknown";
 
@@ -169,6 +191,11 @@ function getMajorPaper(req, res) {
     });
 }
 
+/**
+* Logic to return the answer when a user tries to find out about what semester and location a paper is offered at
+* @author Calli Bates
+* @return {json} JSON string
+*/
 function semester(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
@@ -287,6 +314,11 @@ function semester(req, res) {
     });
 }
 
+/**
+* Logic to return the answer when a user tries to find out the coReq's for a paper
+* @author Alvin Tang
+* @return {json} JSON string
+*/
 function coReq(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
 
@@ -331,6 +363,11 @@ function coReq(req, res) {
 
 }
 
+/**
+* Logic to return the answer when a user tries to find out if a paper exists
+* @author Thom Bilton
+* @return {json} JSON string
+*/
 function getPaper(req, res) {
     let paperToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allPapers ? req.body.queryResult.parameters.allPapers : 'Unknown';
     // console.log(paperToSearch);
@@ -380,6 +417,11 @@ function getPaper(req, res) {
     // return output;
 }
 
+/**
+ * Logic to return the answer when a user tries to find out what jobs are available for each major
+ * @author Thom Bilton
+ * @return {json} a random JSON string, from a set of 3 strings.
+ */
 function majorJobs(req, res) {
     let majorToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.allMajors ? req.body.queryResult.parameters.allMajors : 'Unknown';
     let degreeToSearch = req.body.queryResult && req.body.queryResult.parameters && req.body.queryResult.parameters.Degree ? req.body.queryResult.parameters.Degree : 'Unknown';
@@ -463,8 +505,12 @@ function majorJobs(req, res) {
 
 }
 
-
-
+/**
+ * Generates a random number between 0 and max
+ * @author Thom Bilton
+ * @param {number} max The max number that can be generated
+ * @return {number} The random generated number
+ */
 function getRandomInt(max) {
     return Math.floor(Math.random() * (max - 0) );
 }

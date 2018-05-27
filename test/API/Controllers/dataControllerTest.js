@@ -1,11 +1,9 @@
 'use strict';
 
-// const done = require('chai').done;
 const assert = require('chai').assert;
 const jsonEqual = require('chai').chaiJsonEqual;
 const chai = require('chai');
 const expect = chai.expect;
-// const deep = require('chai').deep;
 const to = require('chai').to;
 chai.use(require('chai-http'));
 const end = require('chai').end;
@@ -14,14 +12,21 @@ const have = require('chai').have;
 const dataController = require('../../../API/Controllers/dataController');
 const getRandomInt  = require('../../../API/Controllers/getRandomInt')
 const index = require('../../../index');
-// const Routes = require('../../../API/Routes/dataController');
 
+/**
+ * Tests if the unit tests actually works
+ * @author Alvin Tang
+ */
 describe('Unit Test Test', function() {
     it('It should return helloWorld to test if the unit tests actually works', function() {
         assert.equal(dataController.helloWorld(),"hello world");
     });
 }) ;
 
+/**
+ * Tests if the random number generator works
+ * @author Thom Bilton
+ */
 describe('Random number test', function () {
     it('should retun a number between 0 and the value input, inclusive', function () {
         getRandomInt
@@ -29,13 +34,20 @@ describe('Random number test', function () {
     });
 })
 
+/**
+ * Tests if the .to.equal chai function works
+ * @author Alvin Tang
+ */
 describe('A=A', function() {
     it('A should equal A', function() {
         expect("A").to.equal("A");
     })
 })
 
-
+/**
+ * Tests if the getPaper function works
+ * @author Thom Bilton
+ */
 describe('getPaper', function () {
 
     var fs = require('fs');
@@ -60,6 +72,10 @@ describe('getPaper', function () {
 
 });
 
+/**
+ * Tests if the failed paper function works
+ * @author Alvin Tang
+ */
 describe('failedPaper', function () {
 
     var fs = require('fs');
@@ -71,7 +87,6 @@ describe('failedPaper', function () {
         this.timeout(10000);
         chai.request("http://localhost:8000")
         .post('/')
-        // .set('content-type', 'application/x-www-form-urlencoded')
         .send(request)
         .end(function (err, res) {
 
@@ -85,6 +100,10 @@ describe('failedPaper', function () {
 });
 
 
+/**
+ * Tests if the jobs major function works
+ * @author Thom Bilton
+ */
 describe('majorsJob', function () {
 
     var fs = require('fs');
@@ -108,7 +127,10 @@ describe('majorsJob', function () {
 
 })
 
-
+/**
+ * Tests if the database connection suceeds
+ * @author Alvin Tang
+ */
 describe('Database Connection', function () {
     it('The database should connect successfully', function () {
         var MongoClient = require('mongodb').MongoClient;
